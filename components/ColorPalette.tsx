@@ -10,19 +10,25 @@ const ColorPalette = ({ currentColor, changeColor }: ColorPaletteProps) => {
     'red',
     'orange',
     'yellow',
-    'green',
-    'blue',
+    'lightgreen',
+    'darkgreen',
+    'lightblue',
+    'darkblue',
     'purple',
     'pink',
     'darkturquoise',
     'teal',
     'hotpink',
+    'blue',
+    'green',
+    'white',
+    'black'
   ];
 
   return (
     <View style={styles.container}>
       {colors.map((color) => {
-        const active = currentColor === color; // Use a clearer name like 'active'
+        const active = currentColor === color; //clearer 'active'
 
         return (
           <TouchableOpacity
@@ -35,7 +41,7 @@ const ColorPalette = ({ currentColor, changeColor }: ColorPaletteProps) => {
               style={[
                 styles.item,
                 { backgroundColor: color },
-                active && styles.active, // Apply active styles only when true
+                active ? styles.active: null // Apply styles when true
               ]}
             />
           </TouchableOpacity>
@@ -49,19 +55,21 @@ export default ColorPalette;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row', // Arrange color items horizontally
-    flexWrap: 'wrap', // Allow items to wrap to the next line
-    justifyContent: 'center', // Center the items horizontally
-    padding: 10, // Add some padding around the container
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'center', 
+    padding: 10, 
   },
   item: {
-    width: 40, // Adjust size as needed
-    height: 40, // Adjust size as needed
-    borderRadius: 20, // Make it circular
-    margin: 5, // Add spacing between color items
+    width: 40, 
+    height: 40, 
+    borderRadius: 20, 
+    margin: 5, 
+    borderWidth: 1,
+    borderColor: 'gray'
   },
   active: {
-    borderWidth: 2, // Highlight the active color with a border
-    borderColor: 'black', // Or any other color you prefer
+    borderWidth: 2, 
+    borderColor: 'black', 
   },
 });

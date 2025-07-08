@@ -20,13 +20,18 @@ const index = () => {
     console.log(i)
   };
 
+  const changeColor = ( color: string) => {
+    setCurrentColor(color)
+  }
+
 
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar  />
-      <ColorPalette  currentColor={currentColor} changeColor={setCurrentColor}/>
       <SvgViewer fillColors={fillColors} onFill={onFill} />
+      <ColorPalette  currentColor={currentColor} changeColor={setCurrentColor}/>
+      
     </SafeAreaView>
   )
 }

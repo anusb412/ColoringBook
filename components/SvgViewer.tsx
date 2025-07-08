@@ -8,7 +8,7 @@ type SvgViewerProps = {
   fillColors: string[];
 };
 
-const SvgViewer = ({ onFill, fillColors }) => {
+const SvgViewer = ({ onFill, fillColors }: SvgViewerProps) => {
   return (
    
       <ScrollView
@@ -20,7 +20,7 @@ const SvgViewer = ({ onFill, fillColors }) => {
         <Svg 
         width={400} 
         height={400}
-        viewBox='0 0 575 500'>
+        viewBox='0 0 650 500'>
         <DummySvg fillColors={fillColors} onFill={onFill} />
       </Svg>
       </ScrollView>
