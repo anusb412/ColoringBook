@@ -1,94 +1,101 @@
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity, Modal } from 'react-native'
-import React, { useState } from 'react'
-import Simple1 from '../components/Simple1';
-import ColorPalette from 'react-native-color-palette';
-import { ColorPicker } from 'react-native-color-picker';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
+export default function App() {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [showTarget, setShowTarget] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [reactionTime, setReactionTime] = useState(null);
+  const [score, setScore] = useState(0);
 
+  const startGame = () => {
+    setGameStarted(true);
+    setScore(0); // Reset score for new game
+    // Delay showing the target for a random time (e.g., 1-3 seconds)
+    const delay = Math.random() * 2000 + 1000;
+    setTimeout(() => {
+      setShowTarget(true);
+      setStartTime(Date.now()); // Record the time when the target appears
+    }, delay);
+  };
 
-const index = () => {
+  const handleTargetPress = () => {
+    if (startTime) {
+      const endTime = Date.now();
+      const reactionDuration = endTime - startTime;
+      setReactionTime(reactionDuration);
+      setScore(score + 1); // Increment score
+      setShowTarget(false);
+      setStartTime(null);
 
-    const [showColorPicker, setShowColorPicker] = useState(false);
-    const [selectedColor, setSelectedColor] = useState('rgb(207, 34, 34)'); // Initial color
-     const [selectedPathId, setSelectedPathId] = useState(null);
+      // Start a new round
+      const delay = Math.random() * 2000 + 1000;
+      setTimeout(() => {
+        setShowTarget(true);
+        setStartTime(Date.now());
+      }, delay);
+    }
+  };
 
-    const handleColorSelect = (color) => {
-        setSelectedColor(color);
-        setShowColorPicker(false); 
-    };
+  return (
+    <View style={styles.container}>
+      {!gameStarted ? (
+        <TouchableOpacity style={styles.startButton} onPress={startGame}>
+          <Text style={styles.buttonText}>Start Game</Text>
+        </TouchableOpacity>
+      ) : (
+        <>
+          {showTarget ? (
+            <TouchableOpacity style={styles.target} onPress={handleTargetPress} />
+          ) : (
+            <Text style={styles.waitingText}>Wait for the square...</Text>
+          )}
 
+          {reactionTime !== null && (
+            <Text style={styles.reactionTime}>Reaction Time: {reactionTime} ms</Text>
+          )}
 
-    return (
-        <View style={styles.container}>
-
-            <Simple1 color={selectedColor}/>
-
-
-            <View style={{ bottom: 50}}>
-                <Button title="Open Color Picker" onPress={() => setShowColorPicker(true)} />
-                <Text style={{ marginTop: 20, color: selectedColor }}>
-                    Selected Color: {selectedColor}
-                </Text>
-
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={showColorPicker}
-                    onRequestClose={() => setShowColorPicker(false)}
-                >
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                        <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                            <ColorPalette
-                                onChange={handleColorSelect}
-                                value={selectedColor} // Set initial selected color
-                                colors={['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9']} // Define your palette
-                                title={"Select a Color"}
-                            />
-                            <Button title="Close" onPress={() => setShowColorPicker(false)} />
-                        </View>
-                    </View>
-                </Modal>
-            </View>
-        </View>
-    )
+          <Text style={styles.scoreText}>Score: {score}</Text>
+        </>
+      )}
+    </View>
+  );
 }
 
-export default index
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    colorContainer: {
-        backgroundColor: 'tan',
-        width: 50,
-        height: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        bottom: 50,
-        flexDirection: 'row',
-        gap: 20,
-    },
-    btnContainer: {
-        backgroundColor: 'white',
-        width: 80,
-        height: 40,
-        bottom: 50
-    },
-    colorPicker: {
-        flexDirection: 'row',
-        bottom: 50,
-        backgroundColor: 'white'
-    },
-    colorBubble: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        marginHorizontal: 5,
-        borderWidth: 1,
-        borderColor: 'black',
-    },
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  startButton: {
+    backgroundColor: 'green',
+    padding: 20,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  waitingText: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  target: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'red',
+    borderRadius: 10,
+  },
+  reactionTime: {
+    marginTop: 20,
+    fontSize: 18,
+  },
+  scoreText: {
+    marginTop: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});

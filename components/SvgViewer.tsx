@@ -20,7 +20,7 @@ const SvgViewer = ({ onFill, fillColors }: SvgViewerProps) => {
         <Svg 
         width={400} 
         height={400}
-        viewBox='0 0 650 500'>
+        viewBox='0 0 400 350'>
         <DummySvg fillColors={fillColors} onFill={onFill} />
       </Svg>
       </ScrollView>
